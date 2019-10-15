@@ -9,7 +9,5 @@ public class Main
     {
         SHA512 m = new SHA512();
         m.hash();
-
-
     }
 }

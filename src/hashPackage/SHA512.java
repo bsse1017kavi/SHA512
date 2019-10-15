@@ -77,7 +77,7 @@ public class SHA512
             }
         }
 
-        System.out.println(padLength);
+       // System.out.println(padLength);
 
         //Appending length bits
 
@@ -106,14 +106,14 @@ public class SHA512
 
     public void initializeBuffers()
     {
-        buffers[0] = Long.parseLong("6A09E667F3BCC908",16);
-        buffers[1] = Long.parseLong("BB67AE8584CAA73B",16);
-        buffers[2] = Long.parseLong("3C6EF372FE94F82B",16);
-        buffers[3] = Long.parseLong("A54FF53A5F1D36F1",16);
-        buffers[4] = Long.parseLong("510E527FADE682D1",16);
-        buffers[5] = Long.parseLong("9B05688C2B3E6C1F",16);
-        buffers[6] = Long.parseLong("1F83D9ABFB41BD6B",16);
-        buffers[7] = Long.parseLong("5BE0CDI9137E2179",16);
+        buffers[0] = Long.parseUnsignedLong("6A09E667F3BCC908",16);
+        buffers[1] = Long.parseUnsignedLong("BB67AE8584CAA73B",16);
+        buffers[2] = Long.parseUnsignedLong("3C6EF372FE94F82B",16);
+        buffers[3] = Long.parseUnsignedLong("A54FF53A5F1D36F1",16);
+        buffers[4] = Long.parseUnsignedLong("510E527FADE682D1",16);
+        buffers[5] = Long.parseUnsignedLong("9B05688C2B3E6C1F",16);
+        buffers[6] = Long.parseUnsignedLong("1F83D9ABFB41BD6B",16);
+        buffers[7] = Long.parseUnsignedLong("5BE0CD19137E2179",16);
     }
 
     public void divide()
@@ -132,17 +132,17 @@ public class SHA512
             }
         }
 
-        for(String s:blocks)
+        /*for(String s:blocks)
         {
             System.out.println(s);
-        }
+        }*/
     }
 
     public void hash()
     {
         read();
         addPadding(this.binary);
-        //initializeBuffers();
+        initializeBuffers();
         divide();
     }
 }
