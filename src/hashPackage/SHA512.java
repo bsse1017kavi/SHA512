@@ -14,6 +14,7 @@ public class SHA512
     ArrayList<String> blocks = new ArrayList<>();
 
     private long [] buffers = new long[8];
+    private long [] hash = new long[8];
 
     StringBuilder binary = new StringBuilder();
 
@@ -114,6 +115,35 @@ public class SHA512
         buffers[5] = Long.parseUnsignedLong("9B05688C2B3E6C1F",16);
         buffers[6] = Long.parseUnsignedLong("1F83D9ABFB41BD6B",16);
         buffers[7] = Long.parseUnsignedLong("5BE0CD19137E2179",16);
+    }
+
+    public long  [] f(ArrayList<String> blocks)
+    {
+        long [] b = new long[8];
+
+        return b;
+    }
+
+    public long [] moduloAdd(long [] a,long [] b)
+    {
+        for(int i=0;i<a.length;i++)
+        {
+            b[i] = (a[i]+b[i])% (long)Math.pow(2,64);
+        }
+
+        return b;
+    }
+
+    public void generateOutput()
+    {
+        hash = buffers;
+
+        for(int i=0;i<blocks.size();i++)
+        {
+            hash = moduloAdd(hash,f(blocks));
+        }
+
+
     }
 
     public void divide()
