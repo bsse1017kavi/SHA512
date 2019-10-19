@@ -117,11 +117,86 @@ public class SHA512
         buffers[7] = Long.parseUnsignedLong("5BE0CD19137E2179",16);
     }
 
-    public long  [] f(ArrayList<String> blocks)
-    {
-        long [] b = new long[8];
 
-        return b;
+    public long Sigma0(long a)
+    {
+        return Long.rotateRight(a,28) ^ Long.rotateRight(a,34) ^ Long.rotateRight(a,39);
+    }
+
+    public long Sigma1(long e)
+    {
+        return Long.rotateRight(e,14) ^ Long.rotateRight(e,18) ^ Long.rotateRight(e,41);
+    }
+
+    public long ch(long e,long f,long g)
+    {
+        return (e&f)^ (Long.reverse(e)&g);
+    }
+
+    public long maj(long a, long b,long c)
+    {
+        return (a&b) ^ (a&c) ^ (b&c);
+    }
+
+    public long sigma0(long word)
+    {
+        return Long.rotateRight(word,1) ^ Long.rotateRight(word,8) ^ word << 7;
+    }
+
+    public long sigma1(long word)
+    {
+        return Long.rotateRight(word,19) ^ Long.rotateRight(word,61) ^ word << 6;
+    }
+
+    public long modAdd(long a,long b)
+    {
+        return (a+b)%(long) Math.pow(2,64);
+    }
+
+    public long  [] f(String block)
+    {
+        long t1,t2,a,b,c,d,e,f,g,h;
+
+        long [] k = new long[80];
+
+
+        long [] words = new long[80];
+
+        for(int i=0;i<16;i++)
+        {
+            words[i] = Long.parseUnsignedLong(block.substring(i,i*64));
+        }
+
+        for(int t=17;t<80;t++)
+        {
+            words[t] = sigma1(words[t-2]) ^ words[t-7] ^ sigma0(words[t-15]) ^ words[t-16];
+        }
+
+        a = buffers[0];
+        b = buffers[1];
+        c = buffers[2];
+        d = buffers[3];
+        e = buffers[4];
+        f = buffers[5];
+        g = buffers[6];
+        h = buffers[7];
+
+        for(int t=0;t<80;t++)
+        {
+            t1 = modAdd(modAdd(modAdd(buffers[7],ch(buffers[4],buffers[5],buffers[6])),modAdd(Sigma1(buffers[4]),words[t])),k[t]);
+            t2 = modAdd(Sigma0(buffers[0]),maj(buffers[0],buffers[1],buffers[2]));
+
+            buffers[0] = modAdd(t1,t2);
+            buffers[1] = a;
+            buffers[2] = b;
+            buffers[3] = c;
+            buffers[4] = modAdd(d,t1);
+            buffers[5] = e;
+            buffers[6] = f;
+            buffers[7] = g;
+        }
+
+        return buffers;
     }
 
     public long [] moduloAdd(long [] a,long [] b)
@@ -140,7 +215,7 @@ public class SHA512
 
         for(int i=0;i<blocks.size();i++)
         {
-            hash = moduloAdd(hash,f(blocks));
+            hash = moduloAdd(hash,f(blocks.get(i)));
         }
 
 
