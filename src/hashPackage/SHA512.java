@@ -130,7 +130,7 @@ public class SHA512
 
     public long ch(long e,long f,long g)
     {
-        return (e&f)^ (Long.reverse(e)&g);
+        return (e&f)^ (~(e)&g);
     }
 
     public long maj(long a, long b,long c)
@@ -140,12 +140,12 @@ public class SHA512
 
     public long sigma0(long word)
     {
-        return Long.rotateRight(word,1) ^ Long.rotateRight(word,8) ^ word << 7;
+        return Long.rotateRight(word,1) ^ Long.rotateRight(word,8) ^ word >> 7;
     }
 
     public long sigma1(long word)
     {
-        return Long.rotateRight(word,19) ^ Long.rotateRight(word,61) ^ word << 6;
+        return Long.rotateRight(word,19) ^ Long.rotateRight(word,61) ^ word >> 6;
     }
 
     public long modAdd(long a,long b)
@@ -157,7 +157,7 @@ public class SHA512
     {
         long t1,t2,a,b,c,d,e,f,g,h;
 
-        String [] keyInHex = {"428a2f98d728ae22", "7137449123ef65cd", "b5c0fbcfec4d3b2f", "e9b5dba58189dbbc",
+        final String [] keyInHex = {"428a2f98d728ae22", "7137449123ef65cd", "b5c0fbcfec4d3b2f", "e9b5dba58189dbbc",
                 "3956c25bf348b538", "59f111f1b605d019", "923f82a4af194f9b", "ab1c5ed5da6d8118", "d807aa98a3030242",
                 "12835b0145706fbe", "243185be4ee4b28c", "550c7dc3d5ffb4e2", "72be5d74f27b896f", "80deb1fe3b1696b1",
                 "9bdc06a725c71235", "c19bf174cf692694", "e49b69c19ef14ad2", "efbe4786384f25e3", "0fc19dc68b8cd5b5",
@@ -191,7 +191,7 @@ public class SHA512
             words[i] = Long.parseUnsignedLong(block.substring(i*64,(i+1)*64-1),2);
         }
 
-        for(int t=17;t<80;t++)
+        for(int t=16;t<80;t++)
         {
             words[t] = modAdd(modAdd(sigma1(words[t-2]), words[t-7] ),modAdd( sigma0(words[t-15]) , words[t-16]));
         }
